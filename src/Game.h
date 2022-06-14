@@ -1,14 +1,24 @@
 #ifndef GAME_H
 #define GAME_H
+#include<SDL2/SDL.h>
+#include<string>
 
 class Game {
 
 	private:
-		// TODO...
+        struct WindowData{
+            std::string Title;
+            unsigned int width, height;
+            bool VSync;
+        };
+        WindowData data;
+        bool isRunning;
+        SDL_Window* window;
+        SDL_GLContext context;
 	public:
 		Game();
 		~Game();
-		void Initialice();
+		void Initialize();
 		void Run();
 		void ProcessInputs();
 		void Update();

@@ -4,7 +4,7 @@ int main() {
 	
 	Game game;
 
-	game.Initialice();
+	game.Initialize();
 	game.Run();
 	game.Destroy();
 
