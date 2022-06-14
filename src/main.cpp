@@ -1,23 +1,12 @@
-#include <iostream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
-#include <imgui/imgui.h>
-#include <glm/glm.hpp>
-#include <sol/sol.hpp>
-
+#include "Game.h"
 
 int main() {
-	// Init lua
-	sol::state lua;
-	lua.open_libraries(sol::lib::base);
+	
+	Game game;
 
-	// Test glm
-	glm::vec2 velocity = glm::vec2(0.0, 0.0);
+	game.Initialice();
+	game.Run();
+	game.Destroy();
 
-	// Init SDL2
-	SDL_Init(SDL_INIT_EVERYTHING);
-	std::cout <<  "HOLAA" << std::endl;
 	return 0;
 }
