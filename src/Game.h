@@ -7,19 +7,20 @@ class Game {
 
 	private:
         struct WindowData{
-            std::string Title;
+            std::string title;
             unsigned int width, height;
             bool VSync;
         };
         WindowData data;
         bool isRunning;
         SDL_Window* window;
-        SDL_GLContext context;
+	SDL_Renderer* renderer;
 	public:
 		Game();
 		~Game();
 		void Initialize();
 		void Run();
+		void Setup();
 		void ProcessInputs();
 		void Update();
 		void Render();

@@ -16,75 +16,51 @@ Game::~Game(){
 }
 
 void Game::Initialize() {
-
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
-    
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cerr << "Error initializing SDL" << std::endl;
         return;
     }
-    
+
+    SDL_DisplayMode displayMode;
+    SDL_GetCurrentDisplayMode(0, &displayMode);
+    data.width  = displayMode.w;
+    data.height = displayMode.h;
+
     window = SDL_CreateWindow(
         NULL,
         SDL_WINDOWPOS_CENTERED,
         SDL_WINDOWPOS_CENTERED,
-        800, 600,
-        SDL_WINDOW_BORDERLESS | SDL_WINDOW_OPENGL
+        data.width, data.height,
+        SDL_WINDOW_BORDERLESS
     );
     
     if (!window) {
        std::cerr << "Error creating SDL window" << std::endl;
        return;     
     }
-    
-    context = SDL_GL_CreateContext(window);
-    if (!context) {
-        std::cerr << "Error creating Window context" << std::endl;
-        return;
+    renderer = SDL_CreateRenderer(window, -1, 0);
+    if (!renderer){
+	std::cerr << "Error creating SDL renderer" << std::endl;
+	return;
     }
     
-    GLenum err = glewInit();
-    if (err != GLEW_OK) {
-        std::cerr << "Error initializing GLEW" << std::endl;
-        return;
-    }
-    
-    std::cout << "Opengl Info" << std::endl;
-    std::cout << "Vendor:\t\t" << (const char*)glGetString(GL_RENDERER) << std::endl;
-    std::cout << "Renderer:\t" << (const char*)glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL:\t\t" << (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    
-    
-    //IMGUI_CHECKVERSION();
-    //ImGui::CreateContext();
-    //ImGuiIO &io = ImGui::GetIO();
-    // Setup Platform/Renderer bindings
-    //ImGui_ImplSDL2_InitForOpenGL(window, (void*)true);
-    /*
-    ImGui_ImplOpenGL3_Init("330");
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    */
-    
+    SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
     isRunning = true;
 }
 
-void Game::Run(){
-	
-	while(isRunning) {
-		ProcessInputs();
-		Update();
-        Render();
-	}
+void Game::Run() {
+    Setup();	
+    while(isRunning) {
+	ProcessInputs();
+	Update();
+      	Render();
+    }
 }
 
 void Game::Destroy() {
 
-    SDL_GL_DeleteContext(context);
+    SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
@@ -109,10 +85,12 @@ void Game::Update() {
 
 }
 
+void Game::Setup() {
+
+}
+
 void Game::Render() {
-    
-    SDL_GL_SetSwapInterval(1);
-    glClearColor(1.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    SDL_GL_SwapWindow(window);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_RenderPresent(renderer);
 }
