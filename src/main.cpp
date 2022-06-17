@@ -1,12 +1,12 @@
-#include "Game.h"
+#include <Game.h>
 
-int main() {
-	
-	Game game;
+int main(int argc, char *argv[]) {
+		
+	Cober::Game* game = new Cober::Game();
 
-	game.Initialize();
-	game.Run();
-	game.Destroy();
+	game->Initialize();
+	game->Run();
+	game->Destroy();
 
 	return 0;
 }

@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/cober/Escritorio/2DEngine'
+g++ -Wall -std=c++17 -I . -I ./src/includes/core -I ./libs/ -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -llua5.4 src/*.cpp src/core/*.cpp -o 2DEngine
+make: Leaving directory '/home/cober/Escritorio/2DEngine'
+ 
