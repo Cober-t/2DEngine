@@ -50,7 +50,7 @@ namespace Cober {
     }
 
     void Window::Render() {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 101, 0, 255);
         SDL_RenderClear(renderer);
         SDL_RenderPresent(renderer);
     }

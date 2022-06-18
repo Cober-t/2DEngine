@@ -1,12 +1,12 @@
-#include <Game.h>
+#include <Engine.h>
 
 int main(int argc, char *argv[]) {
 		
-	Cober::Game* game = new Cober::Game();
+	Cober::Engine* engine = new Cober::Engine();
 
-	game->Initialize();
-	game->Run();
-	game->Destroy();
+	engine->Initialize();
+	engine->Run();
+	engine->Destroy();
 
 	return 0;
 }

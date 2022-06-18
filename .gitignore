@@ -1,1 +1,12 @@
+# Directories
+.vs/
+.vscode/
+Engine/
+bin/
+bin-int/
+
+# Files
 .*.m.swp
+*.user
+*.sln
+
