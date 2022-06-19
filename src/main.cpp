@@ -8,5 +8,6 @@ int main(int argc, char *argv[]) {
 	engine->Run();
 	engine->Destroy();
 
+	delete engine;
 	return 0;
 }

@@ -16,7 +16,10 @@
 #include <unordered_map>
 #include <unordered_set>
 // Own libs
+#include <Logger.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <glm/glm.hpp>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl.h>
 
@@ -39,6 +42,4 @@ namespace Cober {
 }
 
 #define BIT(x)       (1 << x)
-#define LOG(x)       std::cout << x << std::endl; 
-#define LOG_ERROR(x) std::cerr << x << std::endl;
-#define GET_ERROR()  LOG_ERROR(SDL_GetError());
+#define GET_ERROR()  Logger::Error(SDL_GetError());

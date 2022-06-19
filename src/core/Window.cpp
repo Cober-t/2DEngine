@@ -2,9 +2,11 @@
 
 namespace Cober {
 
-    static bool CheckError(int error, const char* errormsg) {
-        if (error == 0) {
-            std::cerr << errormsg << ":\n" << SDL_GetError() << std::endl;
+    static bool CheckError(bool error, const char* errormsg = nullptr) {
+        if (!error) {
+            if (errormsg)
+                std::cerr << errormsg << ":" << "\n";
+            Logger::Error(SDL_GetError());
             return true;
         }
         return false;
@@ -42,9 +44,8 @@ namespace Cober {
     bool Window::CreateRenderer() {
 
         int flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-        renderer = SDL_CreateRenderer(window, -1,flags);
-
-        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+        renderer = SDL_CreateRenderer(window, -1, flags);
+        //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
         return renderer;
     }
@@ -52,6 +53,19 @@ namespace Cober {
     void Window::Render() {
         SDL_SetRenderDrawColor(renderer, 255, 101, 0, 255);
         SDL_RenderClear(renderer);
+
+        // Loads a PNG texture
+        SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+        SDL_FreeSurface(surface);
+        
+        // Rectangle destination for the texture
+        if (surface) {
+            SDL_Rect rect = { 10, 10, surface->w / 4, surface->h / 5};
+            SDL_RenderCopy(renderer, texture, NULL, &rect);
+        }
+        SDL_DestroyTexture(texture);
+
         SDL_RenderPresent(renderer);
     }
 

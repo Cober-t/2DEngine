@@ -11,7 +11,7 @@ namespace Cober {
             unsigned int width, height;
             bool VSync;
 
-            WindowData() : title(NULL), width(1920), height(1080), VSync(true) {}
+            WindowData() : title(NULL), width(800), height(600), VSync(true) {}
         };
         WindowData data;
         SDL_Window* window;

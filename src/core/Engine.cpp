@@ -4,29 +4,34 @@ namespace Cober {
 
     Engine::Engine() {
         isRunning = false;
-        LOG("2DEngine Constructor!");
+        Logger::Log("2DEngine Constructor!");
     }
 
     Engine::~Engine() {
-        LOG("2DEngine Destructor!");
+        Logger::Log("2DEngine Destructor!");
     }
 
     void Engine::Initialize() {
 
         if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-            LOG_ERROR("Error initializating SDL");
+            Logger::Error("Error initializating SDL");
             return;
         }
-
         m_window = Window::Create(); 
-       
         isRunning = true;
+        timestep.SetFPSLimit(60);
     }
 
     void Engine::Run() {
+        
+        Start();
+
         while(isRunning) {
+
+            timestep.Update();
+
             ProcessInputs();
-            Update();
+            Update(timestep);
             m_window->Render();
         }
     }
@@ -47,12 +52,15 @@ namespace Cober {
         }
     }
 
-    void Engine::Update() {
+    void Engine::Start() {
+
+    }
+
+    void Engine::Update(Timestep timestep) {
 
     }
 
     void Engine::Destroy() {
         m_window->CloseWindow();
-        return;
     }
 }

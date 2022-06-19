@@ -1,14 +1,21 @@
-ROOT=-I .
-LIB=-I ./libs/
-INC=-I ./src/includes/core
-BASELIB=-lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -llua5.4
+CC = g++
+LANG_STD = -std=c++17
+COMPILER_FLAGS = -Wall -Wfatal-errors
+INCLUDE_PATH= -I . \
+			  -I ./libs/ \
+			  -I ./src/includes/core
+SRC_FILES = src/*.cpp \
+			src/core/*.cpp
+LINKER_FLAGS= -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer \
+			  -llua5.4
+OBJ_NAME = 2DEngine
 
 build:
-	g++ -Wall -std=c++17 $(ROOT) $(INC) $(LIB) $(BASELIB) src/*.cpp src/core/*.cpp -o 2DEngine
+	$(CC) $(COMPILER_FLAGS) $(LANG_STD) $(INCLUDE_PATH) $(SRC_FILES) $(LINKER_FLAGS) -o 2DEngine
 
 run:
-	./2DEngine
+	./$(OBJ_NAME)
 	
 
 clean:
-	rm 2DEngine
+	rm $(OBJ_NAME)
