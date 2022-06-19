@@ -19,7 +19,7 @@ IncludeDir = {}
 IncludeDir["libs"]  = "libs"
 IncludeDir["SDL2"]  = "libs/SDL2"
 IncludeDir["glm"]   = "libs/glm"
-IncludeDir["ImGui"] = "libs/ImGui"
+IncludeDir["ImGui"] = "libs/imgui"
 IncludeDir["box2D"] = "libs/box2D"
 IncludeDir["lua"]   = "libs/lua"
 IncludeDir["sol"]   = "libs/sol"
@@ -41,18 +41,18 @@ project "Engine"
 	{
 		"src/**.h",
 		"src/**.cpp",
-        "libs/**.h",
-        "libs/**.cpp",
-        "libs/**.hpp",
+        	"libs/**.h",
+       		"libs/**.cpp",
+        	"libs/**.hpp",
 		-- "libs/SDL2/**.h",
 		-- "libs/glm/**.hpp",
 		-- "libs/glm/**.inl",
 		-- "libs/box2D/**.h",
-        -- "libs/imgui/**.h",
+        	-- "libs/imgui/**.h",
 		-- "libs/imgui/**.cpp",
-        -- "libs/lua/**.h",
-        -- "libs/lua/**.hpp",
-        -- "libs/sol/**.hpp",
+        	-- "libs/lua/**.h",
+        	-- "libs/lua/**.hpp",
+        	-- "libs/sol/**.hpp",
 	}
 
 	defines
@@ -69,24 +69,24 @@ project "Engine"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.lua}",
-        "%{IncludeDir.sol}",
+        	"%{IncludeDir.sol}",
 		"%{IncludeDir.box2D}"
 	}
 
 	libdirs
 	{
-        "libs/SDL2",
-        "libs/imgui",
-        "libs/box2D"
-    }
+        	"libs/SDL2",
+	        "libs/imgui",
+        	"libs/box2D"
+	}
 
 	links
 	{
-        "SDL2",
-        "SDL2main",
-        "SDL2_image",
-        "SDL2_ttf",
-        "SDL2_mixer",
+        	"SDL2",
+	        "SDL2main",
+        	"SDL2_image",
+	        "SDL2_ttf",
+        	"SDL2_mixer",
 		"ImGui",
 		"Box2D"
 	}

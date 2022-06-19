@@ -14,7 +14,7 @@ namespace Cober {
 	class Logger {
 	public:
 		static std::vector<LogEntry> messages;
-		static void Log(const std::string&	 message);
+		static void Log(const std::string& message);
 		static void Error(const std::string& message);
 	};
 }

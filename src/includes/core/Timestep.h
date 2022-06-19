@@ -15,7 +15,7 @@ namespace Cober {
 				if (timeToWait > 0 && timeToWait <= 1000 / FPS_Limit)
 					SDL_Delay(timeToWait);
 			}
-			
+
 			deltaTime = (SDL_GetTicks() - lastFrameTime) / 1000.0;
 			lastFrameTime = SDL_GetTicks();
 		}

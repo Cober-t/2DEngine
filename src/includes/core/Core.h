@@ -22,6 +22,7 @@
 #include <glm/glm.hpp>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_sdl.h>
+#include <imgui/imgui_impl_sdlrenderer.h>
 
 namespace Cober {
 
@@ -42,4 +43,4 @@ namespace Cober {
 }
 
 #define BIT(x)       (1 << x)
-#define GET_ERROR()  Logger::Error(SDL_GetError());
+#define GET_ERROR()  Logger::Error(SDL_GetError()); 

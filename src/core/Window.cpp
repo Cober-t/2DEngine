@@ -22,6 +22,10 @@ namespace Cober {
         if (CheckError(CreateWindow(), "Window is null") ||
             CheckError(CreateRenderer(), "Error creating SDL renderer"))
             return;
+
+        // Init ImGui renderer
+        ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+        ImGui_ImplSDLRenderer_Init(renderer);
     }
 
     Window::~Window() { 
@@ -30,7 +34,9 @@ namespace Cober {
 
     bool Window::CreateWindow() {
         
-        int flags = SDL_WINDOW_BORDERLESS;
+        int flags = SDL_WINDOW_RESIZABLE |
+                    SDL_WINDOW_ALLOW_HIGHDPI | 
+                    SDL_WINDOW_BORDERLESS;
         window = SDL_CreateWindow(
             data.title,
             SDL_WINDOWPOS_CENTERED,
@@ -43,14 +49,18 @@ namespace Cober {
 
     bool Window::CreateRenderer() {
 
-        int flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+        int flags = SDL_RENDERER_ACCELERATED | 
+                    SDL_RENDERER_PRESENTVSYNC;
         renderer = SDL_CreateRenderer(window, -1, flags);
+
         //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
 
         return renderer;
     }
 
     void Window::Render() {
+
+
         SDL_SetRenderDrawColor(renderer, 255, 101, 0, 255);
         SDL_RenderClear(renderer);
 
@@ -58,14 +68,18 @@ namespace Cober {
         SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
         SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
         SDL_FreeSurface(surface);
-        
+
         // Rectangle destination for the texture
         if (surface) {
-            SDL_Rect rect = { 10, 10, surface->w / 4, surface->h / 5};
+            SDL_Rect rect = { 10, 10, surface->w / 4, surface->h / 5 };
             SDL_RenderCopy(renderer, texture, NULL, &rect);
         }
         SDL_DestroyTexture(texture);
 
+        //if (enableGUI)
+        ImGui::Render();
+        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+        //}
         SDL_RenderPresent(renderer);
     }
 
