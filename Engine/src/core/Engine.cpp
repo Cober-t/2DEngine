@@ -83,16 +83,18 @@ namespace Cober {
 
         ImGui::ShowDemoWindow();
 
-
-        ImGui::Begin("Another Window");
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            isRunning = false;
-        ImGui::End();
+        {
+            ImGui::Begin("Another Window");
+            ImGui::Text("Hello from another window!");
+            if (ImGui::Button("Close Me"))
+                isRunning = false;
+            ImGui::End();
+        }
     }
 
     void Engine::Destroy() {
-     
+        
+        // Cleanup ImGui
         ImGui_ImplSDLRenderer_Shutdown();
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();

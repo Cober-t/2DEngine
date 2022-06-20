@@ -1,11 +1,12 @@
 CC = g++
 LANG_STD = -std=c++17
+NAME = Engine
 COMPILER_FLAGS = -Wall -Wfatal-errors
 INCLUDE_PATH= -I . \
 			  -I ./libs/ \
 			  -I ./src/includes/core
-SRC_FILES = src/*.cpp \
-			src/core/*.cpp
+SRC_FILES = $(NAME)/src/*.cpp \
+	    $(NAME)/src/core/*.cpp
 LINKER_FLAGS= -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer \
 			  -llua5.4
 OBJ_NAME = 2DEngine

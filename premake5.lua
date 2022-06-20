@@ -16,13 +16,13 @@ workspace "Engine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
-IncludeDir["libs"]  = "libs"
-IncludeDir["SDL2"]  = "libs/SDL2"
-IncludeDir["glm"]   = "libs/glm"
-IncludeDir["ImGui"] = "libs/imgui"
-IncludeDir["box2D"] = "libs/box2D"
-IncludeDir["lua"]   = "libs/lua"
-IncludeDir["sol"]   = "libs/sol"
+IncludeDir["libs"]  = "%{prj.name}/libs"
+IncludeDir["SDL2"]  = "%{prj.name}/libs/SDL2"
+IncludeDir["glm"]   = "%{prj.name}/libs/glm"
+IncludeDir["ImGui"] = "%{prj.name}/libs/imgui"
+IncludeDir["box2D"] = "%{prj.name}/libs/box2D"
+IncludeDir["lua"]   = "%{prj.name}/libs/lua"
+IncludeDir["sol"]   = "%{prj.name}/libs/sol"
 -- IncludeDir["ENTT"] = "%{SolutionDir}/libs/ENTT"
 
 project "Engine"
@@ -39,20 +39,11 @@ project "Engine"
 
 	files
 	{
-		"src/**.h",
-		"src/**.cpp",
-        	"libs/**.h",
-       		"libs/**.cpp",
-        	"libs/**.hpp",
-		-- "libs/SDL2/**.h",
-		-- "libs/glm/**.hpp",
-		-- "libs/glm/**.inl",
-		-- "libs/box2D/**.h",
-        	-- "libs/imgui/**.h",
-		-- "libs/imgui/**.cpp",
-        	-- "libs/lua/**.h",
-        	-- "libs/lua/**.hpp",
-        	-- "libs/sol/**.hpp",
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp",
+        	"%{prj.name}/libs/**.h",
+       		"%{prj.name}/libs/**.cpp",
+        	"%{prj.name}/libs/**.hpp",
 	}
 
 	defines
@@ -62,8 +53,10 @@ project "Engine"
 
 	includedirs
 	{
-		"src/includes",
-		"src/includes/core",
+		"%{prj.name}/src/includes",
+		"%{prj.name}/src/includes/core",
+		"%{prj.name}/src/includes/Entities",
+		"%{prj.name}/src/includes/GUIPanels",
 		"%{IncludeDir.libs}",
 		"%{IncludeDir.SDL2}",
 		"%{IncludeDir.glm}",
@@ -75,9 +68,9 @@ project "Engine"
 
 	libdirs
 	{
-        	"libs/SDL2",
-	        "libs/imgui",
-        	"libs/box2D"
+        	"%{prj.name}/libs/SDL2",
+	        "%{prj.name}/libs/imgui",
+        	"%{prj.name}/libs/box2D"
 	}
 
 	links

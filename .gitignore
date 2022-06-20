@@ -1,7 +1,6 @@
 # Directories
 .vs/
 .vscode/
-Engine/
 bin/
 bin-int/
 
@@ -9,4 +8,7 @@ bin-int/
 *.swp
 *.user
 *.sln
+2DEngine.*
+*.vcxproj
+*.vcxproj.*
 
