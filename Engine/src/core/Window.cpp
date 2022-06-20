@@ -58,16 +58,16 @@ namespace Cober {
 
         // TEST
         {
-            // Loads a PNG texture
-            SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
+            //Loads a PNG texture
+            surface = IMG_Load("../assets/images/blendTest.png");
             SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-            SDL_FreeSurface(surface);
-
+            
             // Rectangle destination for the texture
             if (surface) {
-                SDL_Rect rect = { 10, 10, surface->w / 4, surface->h / 5 };
+                SDL_Rect rect = { 10, 10, surface->w / 2, surface->h / 2 };
                 SDL_RenderCopy(renderer, texture, NULL, &rect);
             }
+
             SDL_DestroyTexture(texture);
         }
     }
@@ -78,6 +78,7 @@ namespace Cober {
     }
 
     void Window::RenderDisplay() {
+        SDL_FreeSurface(surface);
         SDL_RenderPresent(renderer);
     }
 

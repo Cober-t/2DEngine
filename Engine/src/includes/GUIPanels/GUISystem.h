@@ -7,16 +7,16 @@
 namespace Cober {
 
 	class GUISystem {
-		public:
-			GUISystem();
-			~GUISystem();
+	public:
+		GUISystem();
+		~GUISystem();
 
-			// TODO: SDL_Event API
-			void OnEvent(SDL_Event& event);
+		// TODO: SDL_Event API
+		void OnEvent(SDL_Event& event);
 
-			static void Init();
-			static void Begin();
-			static void Update();
-			static void End();
+		static void Init();
+		static void Begin();
+		static void End();
+		static void Update();
 	};
 }

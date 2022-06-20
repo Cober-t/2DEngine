@@ -115,6 +115,13 @@ namespace Cober {
 			ImGui::Text("Hello from another window!");
 			if (ImGui::Button("Close Me"))
 				Engine::Get().CloseEngine();
+
+			//Engine& engine = Engine::Get();
+			//ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+			//glm::vec2 m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			//uint32_t texture = engine.GetWindow().ScreenTexture();
+			//ImGui::Image(reinterpret_cast<void*>(texture), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			
 			ImGui::End();
 		}
 	}

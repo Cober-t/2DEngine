@@ -33,10 +33,9 @@ namespace Cober {
 
         while(isRunning) {
 
-            timestep.Update();
+            timestep.Update();  // Allow limit FPS
 
             ProcessInputs();
-            
             Update(timestep);
 
             if (enableGUI) {
