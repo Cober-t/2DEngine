@@ -25,7 +25,9 @@ namespace Cober {
         bool CreateRenderer();
         SDL_Window*   GetNativeWindow() { return window; }
         SDL_Renderer* GetRenderer() { return renderer; }
+        void ClearWindow(Uint8 r = 21, Uint8 g = 21, Uint8 b = 36, Uint8 k = 255);
         void Render();
+        void RenderDisplay();
         void CloseWindow();
     };
 }

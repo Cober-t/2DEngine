@@ -22,10 +22,6 @@ namespace Cober {
         if (CheckError(CreateWindow(), "Window is null") ||
             CheckError(CreateRenderer(), "Error creating SDL renderer"))
             return;
-
-        // Init ImGui renderer
-        ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
-        ImGui_ImplSDLRenderer_Init(renderer);
     }
 
     Window::~Window() { 
@@ -60,25 +56,28 @@ namespace Cober {
 
     void Window::Render() {
 
-        SDL_SetRenderDrawColor(renderer, 255, 101, 0, 255);
-        SDL_RenderClear(renderer);
+        // TEST
+        {
+            // Loads a PNG texture
+            SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
+            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+            SDL_FreeSurface(surface);
 
-        // Loads a PNG texture
-        SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
-        SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-        SDL_FreeSurface(surface);
-
-        // Rectangle destination for the texture
-        if (surface) {
-            SDL_Rect rect = { 10, 10, surface->w / 4, surface->h / 5 };
-            SDL_RenderCopy(renderer, texture, NULL, &rect);
+            // Rectangle destination for the texture
+            if (surface) {
+                SDL_Rect rect = { 10, 10, surface->w / 4, surface->h / 5 };
+                SDL_RenderCopy(renderer, texture, NULL, &rect);
+            }
+            SDL_DestroyTexture(texture);
         }
-        SDL_DestroyTexture(texture);
+    }
+    
+    void Window::ClearWindow(Uint8 r, Uint8 g, Uint8 b, Uint8 k) {
+        SDL_SetRenderDrawColor(renderer, r, g, b, k);
+        SDL_RenderClear(renderer);
+    }
 
-        //if (enableGUI)
-        ImGui::Render();
-        ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
-        //}
+    void Window::RenderDisplay() {
         SDL_RenderPresent(renderer);
     }
 

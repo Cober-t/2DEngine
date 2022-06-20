@@ -1,23 +1,35 @@
 #pragma once
 #include <Window.h>
 #include <Timestep.h>
+#include <GUISystem.h>
 
 namespace Cober {
 
 	class Engine {
-		private:
-			bool isRunning;
-			Unique<Window> m_window;
-			Timestep timestep;
-		public:
-			Engine();
-			~Engine();
-			void Initialize();
-			void ProcessInputs();
-			void Run();
-			void Start();
-			void Update(Timestep timestep);
-			void Destroy();
-			Window& GetWindow() { return *m_window; }
+	public:
+		Engine();
+		~Engine();
+		static Engine& Get() { return *_instance; }
+		
+		void Initialize();
+
+		void Start();
+		void Run();
+
+		void ProcessInputs();
+		void Update(Timestep timestep);
+		void Destroy();
+
+		void CloseEngine() { isRunning = false; }
+		Window& GetWindow() { return *_window; }
+	private:
+		bool isRunning;
+		bool enableGUI;
+		std::unique_ptr<Window> _window;
+		Timestep timestep;
+	private:
+		static Engine* _instance;
+		friend int ::main(int argc, char** argv);
 	};
+
 }

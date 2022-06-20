@@ -2,8 +2,10 @@
 
 namespace Cober {
 
-    Engine::Engine() {
-        isRunning = false;
+    Engine* Engine::_instance = nullptr;
+
+    Engine::Engine() : isRunning(false), enableGUI(true) {
+        _instance = this;
         Logger::Log("2DEngine Constructor!");
     }
 
@@ -18,19 +20,8 @@ namespace Cober {
             return;
         }
 
-        // Init ImGui
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
-        //io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-        //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-        
-        // [++++++++++ Setup Dear ImGui style ++++++++++]
-        ImGui::StyleColorsDark();
-        //ImGui::StyleColorsClassic();
-
-        m_window = Window::Create(); 
+        _window = Window::Create(); 
+        GUISystem::Init();
        
         isRunning = true;
         timestep.SetFPSLimit(60);
@@ -45,8 +36,15 @@ namespace Cober {
             timestep.Update();
 
             ProcessInputs();
+            
             Update(timestep);
-            m_window->Render();
+
+            if (enableGUI) {
+                GUISystem::Begin();
+                GUISystem::Update();
+                GUISystem::End();
+            }
+            _window->RenderDisplay();
         }
     }
    
@@ -64,6 +62,8 @@ namespace Cober {
                 case SDL_KEYDOWN:
                     if(event.key.keysym.sym == SDLK_ESCAPE)
                         isRunning = false;
+                    if (event.key.keysym.sym == SDLK_d)
+                        enableGUI = enableGUI == true ? false : true;
                     break;
             }
         }
@@ -75,30 +75,16 @@ namespace Cober {
 
     void Engine::Update(Timestep timestep) {
 
-        // [++++++++++ IMGUI ++++++++++]
-        // Start the Dear ImGui frame
-        ImGui_ImplSDLRenderer_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
+        _window->ClearWindow();
 
-        ImGui::ShowDemoWindow();
+        // TODO: Render entities
+        // ...
+        // ...
 
-        {
-            ImGui::Begin("Another Window");
-            ImGui::Text("Hello from another window!");
-            if (ImGui::Button("Close Me"))
-                isRunning = false;
-            ImGui::End();
-        }
+        _window->Render();
     }
 
     void Engine::Destroy() {
-        
-        // Cleanup ImGui
-        ImGui_ImplSDLRenderer_Shutdown();
-        ImGui_ImplSDL2_Shutdown();
-        ImGui::DestroyContext();
-
-        m_window->CloseWindow();
+        _window->CloseWindow();
     }
 }

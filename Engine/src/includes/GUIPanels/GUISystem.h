@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Core.h>
+#include <Window.h>
+#include <Engine.h>
 
 namespace Cober {
 
@@ -9,13 +11,12 @@ namespace Cober {
 			GUISystem();
 			~GUISystem();
 
-			static void Create();
 			// TODO: SDL_Event API
-			static void OnEvent(SDL_Event& event);
-			static void Begin();
-			static void End();
+			void OnEvent(SDL_Event& event);
 
-			void SetDarkThemeColors();
-		private:
+			static void Init();
+			static void Begin();
+			static void Update();
+			static void End();
 	};
 }
