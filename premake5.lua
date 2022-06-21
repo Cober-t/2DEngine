@@ -57,6 +57,7 @@ project "Engine"
 		"%{prj.name}/src/includes/core",
 		"%{prj.name}/src/includes/Entities",
 		"%{prj.name}/src/includes/GUIPanels",
+		"%{prj.name}/src/includes/Systems",
 		"%{IncludeDir.libs}",
 		"%{IncludeDir.SDL2}",
 		"%{IncludeDir.glm}",

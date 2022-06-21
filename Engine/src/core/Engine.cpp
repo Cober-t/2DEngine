@@ -33,8 +33,6 @@ namespace Cober {
 
         while(isRunning) {
 
-            timestep.Update();  // Allow limit FPS
-
             ProcessInputs();
             Update(timestep);
 
@@ -73,6 +71,8 @@ namespace Cober {
     }
 
     void Engine::Update(Timestep timestep) {
+
+        timestep.Update();  // Allow limit FPS
 
         _window->ClearWindow();
 
