@@ -70,7 +70,13 @@ namespace Cober {
     void Engine::Start() {
         // Create som entities
         Entity tank = registry->CreateEntity();
-        Entity truck = registry->CreateEntity();
+
+        // Add some components to the entity
+        //registry->AddComponent<Transform>(tank, Vec2(1.0f), 0.0f, Vec2(1.0f));
+        //registry->AddComponent<Rigidbody>(tank, Vec2(50.0f, 0.0f));
+        tank.AddComponent<Transform>(Vec2(1.0f), 0.0f, Vec2(1.0f));
+        tank.AddComponent<Rigidbody>(Vec2(50.0f, 0.0f));
+        tank.RemoveComponent<Rigidbody>();
     }
 
     void Engine::Update(Timestep timestep) {

@@ -12,14 +12,19 @@ namespace Cober {
 	void System::RemoveEntityFromSystem(Entity entity) {
 		entities.erase(std::remove_if(entities.begin(), entities.end(), [&entity](Entity other) {
 			return entity == other;
-			}), entities.end());
+		}), entities.end());
 	}
 
 	Entity Registry::CreateEntity() {
 		Logger::Log("Entity created with id = " + std::to_string(numEntities));
 		
-		Entity entity(numEntities++);
+		int entityID = numEntities++;
+		Entity entity(entityID);
+		entity.registry = this;
 		entitiesToBeAdded.insert(entity);
+
+		if (entityID >= entityComponentSignatures.size())
+			entityComponentSignatures.resize(entityID + 1);
 		return entity;
 	}
 
@@ -38,6 +43,15 @@ namespace Cober {
 	void Registry::Update() {
 		// TODO: Add the entities that are waiting to be created to the active Systems
 		
+		for (auto entity : entitiesToBeAdded)
+			AddEntityToSystems(entity);
+
+		entitiesToBeAdded.clear();
+
+		for (auto entity : entitiesToBeAdded)
+			AddEntityToSystems(entity);
+
+
 		// TODO: Remove the entities that are waiting to be killed from the active Systems
 
 	}

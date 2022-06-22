@@ -22,6 +22,14 @@ namespace Cober {
 		bool operator < (const Entity& other) const { return id <  other.id; };
 		bool operator > (const Entity& other) const { return id >  other.id; };
 
+		template<typename TComponent, 
+				 typename ...TArgs>		void AddComponent(TArgs&& ...args);
+		template<typename TComponent>	void RemoveComponent();
+		template<typename TComponent>	bool HasComponent() const;
+		template<typename TComponent>	TComponent& GetComponent() const;
+
+		class Registry* registry;	// Alternative to Forward Declaration
+
 	private:
 		int id;
 	};
@@ -40,8 +48,7 @@ namespace Cober {
 		const Signature& GetComponentSignature() const { return componentSignature; }
 
 		// Defines the component type that entities must have to be considered by the system
-		template<typename TComponent>
-		void RequireComponent();
+		template<typename TComponent>	void RequireComponent();
 	private:
 		Signature componentSignature;
 		std::vector<Entity> entities;
@@ -58,12 +65,12 @@ namespace Cober {
 	template<typename T>
 	class Pool : public IPool {
 	public:
-		Pool(int size = 100) { Resize(size); }
+		Pool(int size = 100) { data.resize(size); }
 		virtual ~Pool() = default;
 
 		bool IsEmpty() const { return data.empty(); }
 		int	GetSize() const { return data.size(); }
-		void Resize(int n) { data.reisze(n); }
+		void Resize(int n) { data.resize(n); }
 
 		void Clear() { data.clear(); }
 		void Add(T object) { data, push_back(object); }
@@ -79,7 +86,8 @@ namespace Cober {
 	// +++++ REGISTRY +++++++++++++++++++++++++++++++++++++++++++ //
 	class Registry {
 	public:
-		Registry() = default;
+		Registry() {  Logger::Log("Registry constructor called"); };
+		~Registry() { Logger::Log("Registry destructor called"); };
 
 		void Update();
 		
@@ -94,22 +102,18 @@ namespace Cober {
 		//}
 
 		// Component management
-		template<typename TComponent, typename ...TArgs>
-		void AddComponent(Entity entity, TArgs&& ...args);
-		template<typename TComponent>
-		void RemoveComponent(Entity entity);
-		template<typename TComponent>
-		bool HasComponent(Entity entity) const;
+		template<typename TComponent, 
+				 typename ...TArgs>		void AddComponent(Entity entity, TArgs&& ...args);
+		template<typename TComponent>	void RemoveComponent(Entity entity);
+		template<typename TComponent>	bool HasComponent(Entity entity) const;
+		template<typename TComponent>	TComponent& GetComponent(Entity entity) const;
 
 		// System management
-		template<typename TSystem, typename ...TArgs>
-		void AddSystem(TArgs&& ...args);
-		template<typename TSystem>
-		void RemoveSystem();
-		template<typename TSystem>
-		bool HasSystem() const;
-		template<typename TSystem>
-		TSystem& GetSystem() const;
+		template<typename TSystem, 
+				 typename ...TArgs> 	void AddSystem(TArgs&& ...args);
+		template<typename TSystem>		void RemoveSystem();
+		template<typename TSystem>		bool HasSystem() const;
+		template<typename TSystem>		TSystem& GetSystem() const;
 
 		// Add the entity to the systems that are interested in it
 		void AddEntityToSystems(Entity entity);
@@ -118,11 +122,11 @@ namespace Cober {
 		T& FindSystem();
 	private:
 		int numEntities = 0;
-		std::vector<IPool*> componentPools;
+		std::vector<Ref<IPool>> componentPools;
 
 		std::vector<Signature> entityComponentSignatures;
 
-		std::unordered_map<std::type_index, System*> systems;
+		std::unordered_map<std::type_index, Ref<System>> systems;
 
 		std::set<Entity> entitiesToBeAdded;
 		std::set<Entity> entitiesToBeKilled;
@@ -138,7 +142,7 @@ namespace Cober {
 
 	template<typename TSystem, typename ... TArgs>
 	void Registry::AddSystem(TArgs&& ...args) {
-		TSystem* newSystem(new TSystem(std::forward<TAgs>(args)...));
+		Ref<TSystem> newSystem(CreateRef<TSystem>(std::forward<TAgs>(args)...));
 		systems.emplace{ std::type_index(typeid(TSystem)) , newSystem };
 	}
 
@@ -162,22 +166,24 @@ namespace Cober {
 		const auto componentID = Component<TComponent>::GetID();
 		const auto entityID = entity.GetID();
 
-		if(componentID >= componentPools.size())
+		if(componentID >= static_cast<int>(componentPools.size()))
 			componentPools.resize(componentID + 1, nullptr);
 		
 		if (!componentPools[componentID]) {
-			Pool<TComponent>* newComponentPool = Pool<TComponent>();
+			Ref<Pool<TComponent>> newComponentPool = CreateRef<Pool<TComponent>>();
 			componentPools[componentID] = newComponentPool;
 		}
 
-		Pool<TComponent>* componentPool = componentPools[componentID];
+		Ref<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentID]);
 
 		if (entityID >= componentPool->GetSize())
 			componentPool->Resize(numEntities);
 
 		TComponent newComponent(std::forward<TArgs>(args)...);
 		componentPool->Set(entityID, newComponent);
-		entityComponentSignature[entityID].set(componentID);
+		entityComponentSignatures[entityID].set(componentID);
+
+		Logger::Log("Component ID = " + std::to_string(componentID) +	" was added to entity ID: " + std::to_string(entityID));
 	}
 
 	template<typename TComponent>
@@ -186,6 +192,7 @@ namespace Cober {
 		const auto entityID = entity.GetID();
 
 		entityComponentSignatures[entityID].set(componentID, false);
+		Logger::Log("Component ID = " + std::to_string(componentID) + " was removed from entity ID: " + std::to_string(entityID));
 	}
 
 	template<typename TComponent>
@@ -196,8 +203,38 @@ namespace Cober {
 		return entityComponentSignatures[entityID].test(componentID);
 	}
 
+	template<typename TComponent>
+	TComponent& Registry::GetComponent(Entity entity) const {
+		const auto componentID = Component<TComponent>::GetID();
+		const auto entityID = entity.GetID();
+		auto componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentID]);
+		
+		return componentPool->Get(entityID);
+	}
+
 	template<typename T>
 	T& Registry::FindSystem() {
 		return systems.find(std::type_index(typeid(T)));
+	}
+
+
+	template<typename TComponent, typename ...TArgs>
+	void Entity::AddComponent(TArgs&& ...args) {
+		registry->AddComponent<TComponent>(*this, std::forward<TArgs>(args)...);
+	}
+
+	template<typename TComponent>
+	void Entity::RemoveComponent() {
+		registry->RemoveComponent<TComponent>(*this);
+	}
+
+	template<typename TComponent>
+	bool Entity::HasComponent() const {
+		registry->HasComponent<TComponent>(*this);
+	}
+
+	template<typename TComponent>
+	TComponent& Entity::GetComponent() const {
+		registry->GetComponent<TComponent>(*this);
 	}
 }

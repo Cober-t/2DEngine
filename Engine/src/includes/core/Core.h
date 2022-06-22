@@ -46,5 +46,6 @@ namespace Cober {
         }
 }
 
-#define BIT(x)       (1 << x)
-#define GET_ERROR()  Logger::Error(SDL_GetError()); 
+#define BIT(x)          (1 << x)
+#define GET_ERROR()     Logger::Error(SDL_GetError());
+#define Vec2            glm::vec2

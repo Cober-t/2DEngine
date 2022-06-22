@@ -3,6 +3,7 @@
 #include <Timestep.h>
 #include <GUISystem.h>
 #include <ECS.h>
+#include <Component.h>
 
 namespace Cober {
 
@@ -26,12 +27,11 @@ namespace Cober {
 	private:
 		bool isRunning;
 		bool enableGUI;
-		std::unique_ptr<Window> _window;
+		Unique<Window> _window;
 		Timestep timestep;
 		Unique<Registry> registry;
 	private:
 		static Engine* _instance;
 		friend int ::main(int argc, char** argv);
 	};
-
 }

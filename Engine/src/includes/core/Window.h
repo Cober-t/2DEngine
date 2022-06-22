@@ -15,9 +15,7 @@ namespace Cober {
         };
         WindowData data;
         SDL_Window* window;
-        SDL_Surface* surface;
         SDL_Renderer* renderer;
-        SDL_Texture* screenTexture;
     public:
         Window(const WindowData& data);
         ~Window();
@@ -27,7 +25,7 @@ namespace Cober {
         bool CreateRenderer();
         SDL_Window*   GetNativeWindow() { return window; }
         SDL_Renderer* GetRenderer() { return renderer; }
-        uint32_t ScreenTexture() { return (uint32_t)&screenTexture; }
+        //uint32_t ScreenTexture() { return (uint32_t)&screenTexture; }
         void ClearWindow(Uint8 r = 21, Uint8 g = 21, Uint8 b = 36, Uint8 k = 255);
         void Render();
         void RenderDisplay();

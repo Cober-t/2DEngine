@@ -59,7 +59,7 @@ namespace Cober {
         // TEST
         {
             //Loads a PNG texture
-            surface = IMG_Load("../assets/images/blendTest.png");
+            SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
             SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
             
             // Rectangle destination for the texture
@@ -78,7 +78,7 @@ namespace Cober {
     }
 
     void Window::RenderDisplay() {
-        SDL_FreeSurface(surface);
+        //SDL_FreeSurface(surface);
         SDL_RenderPresent(renderer);
     }
 
