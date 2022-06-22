@@ -40,6 +40,7 @@ namespace Cober {
             data.width, data.height,
             flags
         );
+
         return window;
     }
 
@@ -57,7 +58,10 @@ namespace Cober {
     void Window::Render() {
 
         // TEST
+        /*
         {
+            // TODO: Manage correctly surfaces to avoid low framerate
+
             //Loads a PNG texture
             SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
             SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -70,6 +74,7 @@ namespace Cober {
 
             SDL_DestroyTexture(texture);
         }
+        */
     }
     
     void Window::ClearWindow(Uint8 r, Uint8 g, Uint8 b, Uint8 k) {

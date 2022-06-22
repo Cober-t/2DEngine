@@ -6,7 +6,8 @@ namespace Cober {
 
     Engine::Engine() : isRunning(false), enableGUI(true) {
         _instance = this;
-        registry = CreateUnique<Registry>();
+        _registry = CreateUnique<Registry>();
+        _timestep = CreateUnique<Timestep>();
         Logger::Log("2DEngine Constructor!");
     }
 
@@ -25,7 +26,7 @@ namespace Cober {
         GUISystem::Init();
        
         isRunning = true;
-        timestep.SetFPSLimit(60);
+        //_timestep->SetFPSLimit(60);
     }
 
     void Engine::Run() {
@@ -35,7 +36,7 @@ namespace Cober {
         while(isRunning) {
 
             ProcessInputs();
-            Update(timestep);
+            Update();
 
             if (enableGUI) {
                 GUISystem::Begin();
@@ -68,26 +69,36 @@ namespace Cober {
     }
 
     void Engine::Start() {
+
+        // Add the systems that need to be processed in our game
+        _registry->AddSystem<MovementSystem>();
+        _registry->AddSystem<RenderSystem>();
+
         // Create som entities
-        Entity tank = registry->CreateEntity();
+        Entity tank = _registry->CreateEntity();
 
         // Add some components to the entity
-        //registry->AddComponent<Transform>(tank, Vec2(1.0f), 0.0f, Vec2(1.0f));
-        //registry->AddComponent<Rigidbody>(tank, Vec2(50.0f, 0.0f));
-        tank.AddComponent<Transform>(Vec2(1.0f), 0.0f, Vec2(1.0f));
-        tank.AddComponent<Rigidbody>(Vec2(50.0f, 0.0f));
-        tank.RemoveComponent<Rigidbody>();
+        tank.AddComponent<Transform>(Vec2(10.0f, 30.0f), 0.0f, Vec2(1.0f, 1.0f));
+        tank.AddComponent<Rigidbody>(Vec2(45.0f, 10.0f));
+        tank.AddComponent<Sprite>(50, 50);
     }
 
-    void Engine::Update(Timestep timestep) {
+    void Engine::Update() {
 
-        timestep.Update();  // Allow limit FPS
+        _timestep->Update();  // Allow limit FPS
 
         _window->ClearWindow();
 
-        // TODO: Render entities
-        // ...
-        // ...
+        // Update the registry to process the entities that are waiting to be created/deleted
+        _registry->Update();
+
+        // Ask all the "previous" frame time
+        _registry->GetSystem<MovementSystem>().Update(_timestep->deltaTime);
+        _registry->GetSystem<RenderSystem>().Update(_window->GetRenderer());
+        //registry->GetSystem<CollisiontSystem>().Update();
+        //registry->GetSystem<TerrainSystem>().Update();
+        //registry->GetSystem<AISystem>().Update();
+
 
         _window->Render();
     }

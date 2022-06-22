@@ -1,6 +1,6 @@
 #pragma once
 #include <Core.h>
-#include <Component.h>
+#include <Components.h>
 
 const unsigned int MAX_COMPONENTS = 32;
 typedef std::bitset<MAX_COMPONENTS> Signature;
@@ -11,7 +11,7 @@ namespace Cober {
 	// +++++ ENTITY +++++++++++++++++++++++++++++++++++++++++++++ //
 	class Entity {
 	public:
-		Entity(int id) : id(id) {};
+		Entity(int id) : id(id), registry(nullptr) {};
 		Entity(const Entity& entity) = default;
 
 		int GetID() const { return id; }
@@ -86,7 +86,7 @@ namespace Cober {
 	// +++++ REGISTRY +++++++++++++++++++++++++++++++++++++++++++ //
 	class Registry {
 	public:
-		Registry() {  Logger::Log("Registry constructor called"); };
+		Registry()  { Logger::Log("Registry constructor called"); };
 		~Registry() { Logger::Log("Registry destructor called"); };
 
 		void Update();
@@ -118,9 +118,6 @@ namespace Cober {
 		// Add the entity to the systems that are interested in it
 		void AddEntityToSystems(Entity entity);
 	private:
-		template<typename T>
-		T& FindSystem();
-	private:
 		int numEntities = 0;
 		std::vector<Ref<IPool>> componentPools;
 
@@ -143,12 +140,13 @@ namespace Cober {
 	template<typename TSystem, typename ... TArgs>
 	void Registry::AddSystem(TArgs&& ...args) {
 		Ref<TSystem> newSystem(CreateRef<TSystem>(std::forward<TAgs>(args)...));
-		systems.emplace{ std::type_index(typeid(TSystem)) , newSystem };
+		systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
 	}
 
 	template<typename TSystem>
 	void Registry::RemoveSystem() {
-		systems.erase(FindSystem<TSystem>());
+		auto system = systems.find(std::type_index(typeid(TSystem)));
+		systems.erase(system);
 	}
 
 	template<typename TSystem>
@@ -158,7 +156,8 @@ namespace Cober {
 
 	template<typename TSystem>
 	TSystem& Registry::GetSystem() const {
-		return FindSystem<TSystem>().second;
+		auto system = systems.find(std::type_index(typeid(TSystem)));
+		return *(std::static_pointer_cast<TSystem>(system->second));
 	}
 
 	template<typename TComponent, typename ...TArgs>
@@ -166,7 +165,7 @@ namespace Cober {
 		const auto componentID = Component<TComponent>::GetID();
 		const auto entityID = entity.GetID();
 
-		if(componentID >= static_cast<int>(componentPools.size()))
+		if(componentID >= componentPools.size())
 			componentPools.resize(componentID + 1, nullptr);
 		
 		if (!componentPools[componentID]) {
@@ -212,12 +211,6 @@ namespace Cober {
 		return componentPool->Get(entityID);
 	}
 
-	template<typename T>
-	T& Registry::FindSystem() {
-		return systems.find(std::type_index(typeid(T)));
-	}
-
-
 	template<typename TComponent, typename ...TArgs>
 	void Entity::AddComponent(TArgs&& ...args) {
 		registry->AddComponent<TComponent>(*this, std::forward<TArgs>(args)...);
@@ -230,11 +223,11 @@ namespace Cober {
 
 	template<typename TComponent>
 	bool Entity::HasComponent() const {
-		registry->HasComponent<TComponent>(*this);
+		return registry->HasComponent<TComponent>(*this);
 	}
 
 	template<typename TComponent>
 	TComponent& Entity::GetComponent() const {
-		registry->GetComponent<TComponent>(*this);
+		return registry->GetComponent<TComponent>(*this);
 	}
 }

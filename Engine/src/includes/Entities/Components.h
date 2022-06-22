@@ -45,4 +45,12 @@ namespace Cober {
 		Rigidbody(const Rigidbody&) = default;
 		Rigidbody(Vec2 vel) : velocity(vel) {}
 	};
+
+	struct Sprite {
+		int w, h;
+
+		Sprite() = default;
+		Sprite(const Sprite&) = default;
+		Sprite(int width, int height) : w(width), h(height) {}
+	};
 }

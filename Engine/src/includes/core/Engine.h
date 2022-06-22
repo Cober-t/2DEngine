@@ -3,7 +3,9 @@
 #include <Timestep.h>
 #include <GUISystem.h>
 #include <ECS.h>
-#include <Component.h>
+#include <Components.h>
+#include <Systems/MovementSystem.h>
+#include <Systems/RenderSystem.h>
 
 namespace Cober {
 
@@ -19,7 +21,7 @@ namespace Cober {
 		void Run();
 
 		void ProcessInputs();
-		void Update(Timestep timestep);
+		void Update();
 		void Destroy();
 
 		void CloseEngine() { isRunning = false; }
@@ -28,8 +30,8 @@ namespace Cober {
 		bool isRunning;
 		bool enableGUI;
 		Unique<Window> _window;
-		Timestep timestep;
-		Unique<Registry> registry;
+		Unique<Timestep> _timestep;
+		Unique<Registry> _registry;
 	private:
 		static Engine* _instance;
 		friend int ::main(int argc, char** argv);

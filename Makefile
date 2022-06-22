@@ -7,6 +7,7 @@ INCLUDE_PATH= -I . \
 	      -I ./$(NAME)/src/includes/core
 	      -I ./$(NAME)/src/includes/Entities
 	      -I ./$(NAME)/src/includes/GUIPanels
+	      -I ./$(NAME)/src/includes/Systems
 SRC_FILES = $(NAME)/src/*.cpp \
 	    $(NAME)/src/core/*.cpp
 	    $(NAME)/src/Entities/*.cpp
