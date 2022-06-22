@@ -6,6 +6,7 @@ namespace Cober {
 
     Engine::Engine() : isRunning(false), enableGUI(true) {
         _instance = this;
+        registry = CreateUnique<Registry>();
         Logger::Log("2DEngine Constructor!");
     }
 
@@ -67,7 +68,9 @@ namespace Cober {
     }
 
     void Engine::Start() {
-
+        // Create som entities
+        Entity tank = registry->CreateEntity();
+        Entity truck = registry->CreateEntity();
     }
 
     void Engine::Update(Timestep timestep) {

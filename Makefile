@@ -7,12 +7,10 @@ INCLUDE_PATH= -I . \
 	      -I ./$(NAME)/src/includes/core
 	      -I ./$(NAME)/src/includes/Entities
 	      -I ./$(NAME)/src/includes/GUIPanels
-	      -I ./$(NAME)/src/includes/Systems
 SRC_FILES = $(NAME)/src/*.cpp \
 	    $(NAME)/src/core/*.cpp
 	    $(NAME)/src/Entities/*.cpp
 	    $(NAME)/src/GUIPanels/*.cpp
-	    $(NAME)/src/Systems/*.cpp
 LINKER_FLAGS= -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer \
 			  -llua5.4
 OBJ_NAME = 2DEngine

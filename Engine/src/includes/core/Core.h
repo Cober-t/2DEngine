@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <functional>
 #include <bitset>
+#include <set>
+#include <typeindex>
+#include <vector>
 
 #include <string>
 #include <sstream>
@@ -18,7 +21,6 @@
 #include <unordered_set>
 // Own libs
 #include <Logger.h>
-#include <UUID.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <glm/glm.hpp>

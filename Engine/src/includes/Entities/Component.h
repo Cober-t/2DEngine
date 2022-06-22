@@ -5,11 +5,18 @@
 
 namespace Cober {
 
-	struct ID {
-		UUID id;
+	struct IComponent {
+	protected:
+		static int nextID;
+	};
 
-		ID() = default;
-		ID(const ID&) = default;
+	// Used to assign a unique IDs to a component type
+	template <typename T>
+	class Component : public IComponent {
+		static int GetID() {
+			static auto id = nextID++;
+			return id;
+		}
 	};
 
 	struct Transform {
