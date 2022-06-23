@@ -21,7 +21,7 @@ namespace Cober {
 
 	struct Transform {
 		Vec2 position = {0.0f, 0.0f};
-		float rotation = 0.0f;
+		double rotation = 0;
 		Vec2 scale = { 0.0f, 0.0f };
 
 		Transform() = default;
@@ -48,9 +48,12 @@ namespace Cober {
 
 	struct Sprite {
 		int w, h;
+		std::string assetID;
+		Vec2 srcRect;
 
 		Sprite() = default;
 		Sprite(const Sprite&) = default;
-		Sprite(int width, int height) : w(width), h(height) {}
+		Sprite(const std::string& ID, int width, int height, Vec2 rect = Vec2(0, 0)) 
+			: assetID(ID), w(width), h(height), srcRect(rect) {}
 	};
 }

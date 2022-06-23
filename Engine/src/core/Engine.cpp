@@ -6,9 +6,10 @@ namespace Cober {
 
     Engine::Engine() : isRunning(false), enableGUI(true) {
         _instance = this;
-        _registry = CreateUnique<Registry>();
-        _timestep = CreateUnique<Timestep>();
         Logger::Log("2DEngine Constructor!");
+        _timestep = CreateUnique<Timestep>();
+        _registry = CreateUnique<Registry>();
+        _assetManager = CreateUnique<AssetManager>();
     }
 
     Engine::~Engine() {
@@ -43,7 +44,7 @@ namespace Cober {
                 GUISystem::Update();
                 GUISystem::End();
             }
-            _window->RenderDisplay();
+            _window->Render();
         }
     }
    
@@ -74,33 +75,31 @@ namespace Cober {
         _registry->AddSystem<MovementSystem>();
         _registry->AddSystem<RenderSystem>();
 
+        // Add assets
+        SDL_Renderer* renderer = _window->GetRenderer();
+        _assetManager->AddTexture("cat", "../assets/images/tank-panther-right.png");
+
         // Create som entities
         Entity tank = _registry->CreateEntity();
 
         // Add some components to the entity
-        tank.AddComponent<Transform>(Vec2(10.0f, 30.0f), 0.0f, Vec2(1.0f, 1.0f));
-        tank.AddComponent<Rigidbody>(Vec2(45.0f, 10.0f));
-        tank.AddComponent<Sprite>(50, 50);
+        tank.AddComponent<Transform>(Vec2(10.0, 10.0), 0, Vec2(1.0, 1.0));
+        tank.AddComponent<Rigidbody>(Vec2(45.0f, 0.0f));
+        tank.AddComponent<Sprite>("cat", 128*3, 128*3);
     }
 
     void Engine::Update() {
 
         _timestep->Update();  // Allow limit FPS
 
-        _window->ClearWindow();
-
         // Update the registry to process the entities that are waiting to be created/deleted
         _registry->Update();
 
         // Ask all the "previous" frame time
         _registry->GetSystem<MovementSystem>().Update(_timestep->deltaTime);
-        _registry->GetSystem<RenderSystem>().Update(_window->GetRenderer());
-        //registry->GetSystem<CollisiontSystem>().Update();
-        //registry->GetSystem<TerrainSystem>().Update();
-        //registry->GetSystem<AISystem>().Update();
 
-
-        _window->Render();
+        _window->ClearWindow();
+        _registry->GetSystem<RenderSystem>().Update(_window->GetRenderer(), _assetManager);
     }
 
     void Engine::Destroy() {

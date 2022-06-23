@@ -55,35 +55,12 @@ namespace Cober {
         return renderer;
     }
 
-    void Window::Render() {
-
-        // TEST
-        /*
-        {
-            // TODO: Manage correctly surfaces to avoid low framerate
-
-            //Loads a PNG texture
-            SDL_Surface* surface = IMG_Load("../assets/images/blendTest.png");
-            SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-            
-            // Rectangle destination for the texture
-            if (surface) {
-                SDL_Rect rect = { 10, 10, surface->w / 2, surface->h / 2 };
-                SDL_RenderCopy(renderer, texture, NULL, &rect);
-            }
-
-            SDL_DestroyTexture(texture);
-        }
-        */
-    }
-    
     void Window::ClearWindow(Uint8 r, Uint8 g, Uint8 b, Uint8 k) {
         SDL_SetRenderDrawColor(renderer, r, g, b, k);
         SDL_RenderClear(renderer);
     }
 
-    void Window::RenderDisplay() {
-        //SDL_FreeSurface(surface);
+    void Window::Render() {
         SDL_RenderPresent(renderer);
     }
 

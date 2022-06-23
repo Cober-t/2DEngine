@@ -28,7 +28,6 @@ namespace Cober {
         //uint32_t ScreenTexture() { return (uint32_t)&screenTexture; }
         void ClearWindow(Uint8 r = 21, Uint8 g = 21, Uint8 b = 36, Uint8 k = 255);
         void Render();
-        void RenderDisplay();
         void CloseWindow();
     };
 }

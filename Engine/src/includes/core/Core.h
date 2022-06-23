@@ -12,6 +12,7 @@
 #include <set>
 #include <typeindex>
 #include <vector>
+#include <map>
 
 #include <string>
 #include <sstream>

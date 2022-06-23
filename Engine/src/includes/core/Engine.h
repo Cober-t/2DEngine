@@ -3,6 +3,7 @@
 #include <Timestep.h>
 #include <GUISystem.h>
 #include <ECS.h>
+#include <AssetManager.h>
 #include <Components.h>
 #include <Systems/MovementSystem.h>
 #include <Systems/RenderSystem.h>
@@ -32,6 +33,7 @@ namespace Cober {
 		Unique<Window> _window;
 		Unique<Timestep> _timestep;
 		Unique<Registry> _registry;
+		Unique<AssetManager> _assetManager;
 	private:
 		static Engine* _instance;
 		friend int ::main(int argc, char** argv);
